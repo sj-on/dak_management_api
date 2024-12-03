@@ -14,9 +14,12 @@ const sequelize = new Sequelize({
 // Define User model
 class User extends Model {}
 User.init({
-  name: DataTypes.STRING,
+  firstname: DataTypes.STRING,
+  lastname: DataTypes.STRING,
+  empid: DataTypes.STRING,  
   email: DataTypes.STRING,
-  password: DataTypes.STRING
+  password: DataTypes.STRING,
+  security_question: DataTypes.STRING
 }, { sequelize, modelName: 'user' });
 
 // Sync models with database
