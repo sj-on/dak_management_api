@@ -22,6 +22,19 @@ User.init({
   security_question: DataTypes.STRING
 }, { sequelize, modelName: 'user' });
 
+class Dak extends Model {}
+Dak.init({
+  dak_id: DataTypes.STRING,
+  dak_subject: DataTypes.STRING,
+  dak_type: DataTypes.STRING,  
+  date_sent: DataTypes.DATE,
+  to_rank: DataTypes.STRING,
+  to_deptt: DataTypes.STRING,
+  from_rank: DataTypes.STRING,
+  from_deptt: DataTypes.STRING,
+  is_dak_active: DataTypes.BOOLEAN
+}, { sequelize, modelName: 'dak' });
+
 // Sync models with database
 sequelize.sync();
 
@@ -64,6 +77,26 @@ app.delete('/users/:id', async (req, res) => {
     res.status(404).json({ message: 'User not found' });
   }
 });
+
+app.get('/getAllDaks', async (req, res) => {
+    const daks = await Dak.findAll();
+    res.json(daks);
+  });
+  
+  app.post('/saveDak', async (req, res) => {
+    const dak = await Dak.create({...req.body, is_dak_active: true});
+    res.json(dak);
+  });
+  
+  app.put('/saveDak/:id', async (req, res) => {
+    const dak = await Dak.findByPk(req.params.id);
+    if (dak) {
+      await dak.update(req.body);
+      res.json(dak);
+    } else {
+      res.status(404).json({ message: 'Dak not found' });
+    }
+  });
 
 // Start server
 app.listen(port, () => {
